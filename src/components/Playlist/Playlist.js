@@ -49,7 +49,7 @@ class Playlist extends Component {
 
     return (
     <div className="Playlist">
-      <input value={this.state.playlistName} onChange={this.setPlaylistName} onClick={this.clearInputOnClick} onBlur={this.resetDefaultPlaylistName}/>
+      <input value={this.state.playlistName} onChange={this.setPlaylistName} onClick={this.clearInputOnClick} />
       <TrackList tracks={this.props.tracks} action="-" modifyPlaylist={this.props.removeTrack}/>
       {saveButton}
     </div>

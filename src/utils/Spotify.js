@@ -4,49 +4,64 @@ const AUTH_URL = 'https://accounts.spotify.com/authorize';
 const REDIRECT_URI = 'http://localhost:3000/';
 
 let accessToken,
+    expiresIn,
     userId;
 
 let Spotify = {
-
-  /**
-   * Reset local storage values if the token expiration time has passed.
-   */
-
-  localStorageIsValid() {
-    let expiresIn = localStorage.getItem('tokenExpiration');
-    if (expiresIn && Date.now() >= expiresIn) {
-      localStorage.setItem('accessToken', '');
-      localStorage.setItem('tokenExpiration', '');
-    } else {
-      accessToken = localStorage.getItem('accessToken');
-      return true;
-    }
-  },
-
-  /**
-   * Request access token from Spotify and set local storage to current valid access token.
-   * Additionally, reset the local accessToken variable and local storage after 60 min.
-   */
 
   getAccessToken() {
     if (accessToken) {
       return accessToken;
     } else if (window.location.href.match(/access_token=([^&]*)/) && window.location.href.match(/expires_in=([^&]*)/)) {
-      accessToken = window.location.href.match(/access_token=([^&]*)/)[0].slice(13);
-;
-      let expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('tokenExpiration', Date.now() + (3600 * 999)); 
-      window.setTimeout(() => {
-        accessToken = '';
-        localStorage.setItem('accessToken', '');
-      }, expiresIn * 1000);
-      window.history.pushState('Access Token', null, '/');
+      this.parseToken();
     } else {
       window.location = `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
     } 
   },
 
+  parseToken() {
+    accessToken = window.location.href.match(/access_token=([^&]*)/)[0].slice(13);
+    localStorage.setItem('accessToken', accessToken);
+    expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11);
+    localStorage.setItem('tokenExpiration', Date.now() + (expiresIn * 1000));
+    window.setTimeout(() => {
+      accessToken = '';
+      localStorage.setItem('accessToken', '');
+    }, expiresIn * 1000); // reset token if browser session extends beyond the token's valid timeframe
+    window.history.pushState('Access Token', null, '/');
+  },
+
+ /**
+  * Test local token expiration and set accessToken variable to localToken value if 
+  * variable has not been set. This is to allow for query of user information on page reload
+  * as well as the redirect from the Spotify authentication page.
+  */
+
+  handleLocalToken() {
+    if (Date.now() > localStorage.getItem('tokenExpiration')) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('tokenExpiration');
+    }
+    if (localStorage.getItem('accessToken')) {
+      accessToken = accessToken ? accessToken : localStorage.getItem('accessToken');
+    }
+  },
+
+  getUserInfo() {
+    return fetch('https://api.spotify.com/v1/me', {headers: {Authorization: `Bearer ${accessToken}`}})
+    .then(response => response.json())
+    .then(jsonResponse => {
+      userId = jsonResponse.id;
+      return {
+        id: jsonResponse.id,
+        display_name: jsonResponse.display_name,
+        image_url: jsonResponse.images[0].url
+      }
+    })
+    .catch(error => {
+      console.log(`No data was returned. User has not been authorized.`);
+    });
+ },
 
   search(term) {
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
@@ -66,23 +81,6 @@ let Spotify = {
         } else return [];
       })
   },
-
- /**
-  * Request user information from Spotify API for current authorized user.
-  */
-
-  getUserInfo() {
-      return fetch('https://api.spotify.com/v1/me', {headers: {Authorization: `Bearer ${accessToken || localStorage.getItem('accessToken')}`}})
-      .then(response => response.json())
-      .then(jsonResponse => {
-        userId = jsonResponse.id;
-        return {
-          id: jsonResponse.id,
-          display_name: jsonResponse.display_name,
-          image_url: jsonResponse.images[0].url
-        }
-      })
-  },
  
   savePlaylist(name, trackList) {
     let playlistId;
@@ -98,7 +96,7 @@ let Spotify = {
       return playlistId;
     })
     .then(playlistId => {
-     return Spotify.addTracksToPlaylist(playlistId, trackList)
+     return this.addTracksToPlaylist(playlistId, trackList)
      .then(success => success);
     })
    },
@@ -113,7 +111,6 @@ let Spotify = {
       })
       .then(success => success.status);
    }
-
 }
 
 export default Spotify;

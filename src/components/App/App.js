@@ -10,7 +10,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
       user: '',
       tracks: [],
       playlist: [],
@@ -26,9 +25,12 @@ class App extends React.Component {
   
   getAccessToken() {
     Spotify.getAccessToken();
+    this.setState({loggedIn: true})
   }
 
   searchSpotify(term) {
+    this.getAccessToken();
+    this.getUserInfo();
     Spotify.search(term)
       .then(results => {
         this.setState({
@@ -40,13 +42,15 @@ class App extends React.Component {
   getUserInfo() {
     Spotify.getUserInfo()
       .then(user => {
-        this.setState({
-          user: {
-            id: user.id,
-            displayName: user.display_name,
-            imageUrl: user.image_url
-          }
-        })}
+        if (user) {
+          this.setState({
+            user: {
+              id: user.id,
+              displayName: user.display_name,
+              imageUrl: user.image_url
+            },
+          })};
+        }
     );
   }
 
@@ -79,13 +83,17 @@ class App extends React.Component {
    * This is to provide personalization on initial load from the Spotify authentication redirect.
    */
   componentWillMount() {
-    //let hasToken = Spotify.localStorageIsValid();
-
-    if ( localStorage.getItem('accessToken') || window.location.href.match(/access_token=([^&]*)/)) {
-      Spotify.localStorageIsValid();
+    if (window.location.href.match(/access_token=([^&]*)/)) {
+      Spotify.parseToken();
       this.getUserInfo();
-      this.setState({loggedIn: true})
-    }
+      this.setState({loggedIn: true});
+    } else if (localStorage.getItem("accessToken")) {
+      console.log('Blue tab \n' + localStorage.getItem("accessToken"));
+      Spotify.handleLocalToken();
+      this.getUserInfo();
+      this.setState({loggedIn: true});
+    } 
+    
   }
 
 
@@ -93,12 +101,12 @@ class App extends React.Component {
     let user = '';
 
     if (this.state.user) {
-      user = <div className="user-info">Hi  <span className="user-name">{this.state.user.displayName.split(' ').shift()}</span><img src={this.state.user.imageUrl} alt='user avatar' /></div>;
+      user = <div className="user-info">Hi<span className="user-name">{this.state.user.displayName.split(' ').shift()}</span><img src={this.state.user.imageUrl} alt='user avatar' /></div>;
     }
     return (
       <div>
         <header className='main-page-header'>
-          <h1>Ja<span className="highlight">mmm</span>ing</h1>
+          <h1 className="page-title">Ja<span className="highlight">mmm</span>ing</h1>
           {user}
         </header> 
         <div className="App">
