@@ -36,15 +36,13 @@ let Spotify = {
   * variable has not been set. This is to allow for query of user information on page reload
   * as well as the redirect from the Spotify authentication page.
   */
-
-  handleLocalToken() {
+  
+  localTokenisValid() {
     if (Date.now() > localStorage.getItem('tokenExpiration')) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenExpiration');
-    }
-    if (localStorage.getItem('accessToken')) {
-      accessToken = accessToken ? accessToken : localStorage.getItem('accessToken');
-    }
+      return false;
+    } return true;
   },
 
   getUserInfo() {

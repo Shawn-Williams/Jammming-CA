@@ -21,11 +21,16 @@ class App extends React.Component {
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
+    this.checkLocalToken = this.checkLocalToken.bind(this);
   }
   
   getAccessToken() {
     Spotify.getAccessToken();
     this.setState({loggedIn: true})
+  }
+
+  checkLocalToken() {
+    Spotify.localTokenisValid();
   }
 
   searchSpotify(term) {
@@ -88,14 +93,13 @@ class App extends React.Component {
       this.getUserInfo();
       this.setState({loggedIn: true});
     } else if (localStorage.getItem("accessToken")) {
-      console.log('Blue tab \n' + localStorage.getItem("accessToken"));
-      Spotify.handleLocalToken();
+      if(this.checkLocalToken()) {
+        this.setState({loggedIn: false});
+      }
       this.getUserInfo();
       this.setState({loggedIn: true});
     } 
-    
   }
-
 
   render() {
     let user = '';
