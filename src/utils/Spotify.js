@@ -1,7 +1,7 @@
 
 const CLIENT_ID = 'fe091ac7832744b692ad3ec109f337b4';
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
-const REDIRECT_URI = 'http://localhost:3000/';
+const REDIRECT_URI = 'http://localhost:3000/'; //Change this uri to the address where the app is hosted
 
 let accessToken,
     expiresIn,
