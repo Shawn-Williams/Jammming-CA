@@ -32,3 +32,7 @@
   font-weight: 300;
   color: rgba(256, 256, 256, 0.8);
 }
+
+audio::-webkit-media-controls-panel {
+  background: none;
+}

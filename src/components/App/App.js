@@ -10,6 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loggedIn: false,
       user: '',
       tracks: [],
       playlist: [],
@@ -92,14 +93,18 @@ class App extends React.Component {
       Spotify.parseToken();
       this.getUserInfo();
       this.setState({loggedIn: true});
-    } else if (localStorage.getItem("accessToken")) {
-      if(this.checkLocalToken()) {
-        this.setState({loggedIn: false});
-      }
+    } 
+    //console.log('Testing access token: ' + localStorage.getItem('accessToken'));
+    if (localStorage.getItem('accessToken')) {
+      console.log('access token exists')
+      Spotify.getAccessToken();
       this.getUserInfo();
       this.setState({loggedIn: true});
     } 
   }
+
+
+
 
   render() {
     let user = '';

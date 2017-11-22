@@ -1,17 +1,22 @@
+import CONFIG from './config';
 
-const CLIENT_ID = 'fe091ac7832744b692ad3ec109f337b4';
+const CLIENT_ID = CONFIG.clientId;
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
-const REDIRECT_URI = 'http://localhost:3000/'; //Change this uri to the address where the app is hosted
-
+const REDIRECT_URI = CONFIG.redirectURI;
 let accessToken,
     expiresIn,
-    userId;
+    userId,
+    token = accessToken ? accessToken : localStorage.getItem('accessToken');
+
 
 let Spotify = {
 
   getAccessToken() {
+    this.tokenIsValid();
     if (accessToken) {
       return accessToken;
+    } else if (!accessToken && localStorage.getItem('accessToken')) {
+      accessToken = localStorage.getItem('accessToken');
     } else if (window.location.href.match(/access_token=([^&]*)/) && window.location.href.match(/expires_in=([^&]*)/)) {
       this.parseToken();
     } else {
@@ -19,33 +24,28 @@ let Spotify = {
     } 
   },
 
-  parseToken() {
+  parseToken() { 
     accessToken = window.location.href.match(/access_token=([^&]*)/)[0].slice(13);
+    expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11)
     localStorage.setItem('accessToken', accessToken);
-    expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11);
     localStorage.setItem('tokenExpiration', Date.now() + (expiresIn * 1000));
-    window.setTimeout(() => {
-      accessToken = '';
-      localStorage.setItem('accessToken', '');
-    }, expiresIn * 1000); // reset token if browser session extends beyond the token's valid timeframe
     window.history.pushState('Access Token', null, '/');
   },
 
  /**
-  * Test local token expiration and set accessToken variable to localToken value if 
-  * variable has not been set. This is to allow for query of user information on page reload
-  * as well as the redirect from the Spotify authentication page.
-  */
-  
-  localTokenisValid() {
+  * Test token expiration and reset both local token and token variable if expired
+ */
+  tokenIsValid() {
     if (Date.now() > localStorage.getItem('tokenExpiration')) {
+      console.log('Token is invalid')
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenExpiration');
-      return false;
-    } return true;
+      accessToken = '';
+    } 
   },
 
   getUserInfo() {
+    console.log('User info token: ' + token);
     return fetch('https://api.spotify.com/v1/me', {headers: {Authorization: `Bearer ${accessToken}`}})
     .then(response => response.json())
     .then(jsonResponse => {
@@ -73,7 +73,8 @@ let Spotify = {
               name: track.name,
               artist: track.artists[0].name,
               album: track.album.name,
-              uri: track.uri
+              uri: track.uri,
+              previewUrl: track.preview_url
             }
           });
         } else return [];
