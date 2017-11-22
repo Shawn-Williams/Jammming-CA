@@ -18,7 +18,5 @@ an artist name, album title, or song title. Individual tracks can be added and r
 
    export default CONFIG;
 ```
-}
-
 5. Run 'npm run build' in the terminal to create the application's production build.
 6. Deploy the production build to your hosting service of choice.
