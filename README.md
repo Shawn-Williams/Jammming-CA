@@ -10,7 +10,8 @@ an artist name, album title, or song title. Individual tracks can be added and r
 3. Run 'npm install'
 4. Create a config.js file in src/utils containing the following object with values set to your Spotify API credentials and redirect url: 
 
-```const CONFIG = {
+```
+   const CONFIG = {
     clientId: <Client ID>,
     redirectURI: <Application URI>
    }
