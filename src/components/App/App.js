@@ -128,7 +128,7 @@ class App extends React.Component {
         <div className="App">
           <SearchBar search={this.searchSpotify} loggedIn={this.state.loggedIn} getAccessToken={this.getAccessToken}/>
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.tracks} addTrack={this.addTrack}/>
+            <SearchResults searchResults={this.state.tracks} addTrack={this.addTrack} playlist={this.state.playlist}/>
             <Playlist tracks={this.state.playlist} removeTrack={this.removeTrack} savePlaylist={this.savePlaylistToSpotify} savedStatus={this.state.saved}/>
           </div>
         </div>
