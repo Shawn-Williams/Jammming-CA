@@ -5,8 +5,8 @@ const AUTH_URL = 'https://accounts.spotify.com/authorize';
 const REDIRECT_URI = CONFIG.redirectURI;
 let accessToken,
     expiresIn,
-    userId,
-    token = accessToken ? accessToken : localStorage.getItem('accessToken');
+    userId;
+    // token = accessToken ? accessToken : localStorage.getItem('accessToken');
 
 
 let Spotify = {
@@ -20,7 +20,7 @@ let Spotify = {
     } else if (window.location.href.match(/access_token=([^&]*)/) && window.location.href.match(/expires_in=([^&]*)/)) {
       this.parseToken();
     } else {
-      window.location = `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
+      window.location = `${AUTH_URL}?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&show_dialog=true&redirect_uri=${REDIRECT_URI}`;
     } 
   },
 
@@ -31,7 +31,15 @@ let Spotify = {
     localStorage.setItem('tokenExpiration', Date.now() + (expiresIn * 1000));
     window.history.pushState('Access Token', null, '/');
   },
+  
+  resetTokens() {
+    accessToken = '';
+    expiresIn = '';
+    userId = '';
 
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('tokenExpiration');
+  },
  /**
   * Test token expiration and reset both local token and token variable if expired
  */
@@ -45,7 +53,6 @@ let Spotify = {
   },
 
   getUserInfo() {
-    console.log('User info token: ' + token);
     return fetch('https://api.spotify.com/v1/me', {headers: {Authorization: `Bearer ${accessToken}`}})
     .then(response => response.json())
     .then(jsonResponse => {

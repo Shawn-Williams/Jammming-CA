@@ -28,7 +28,7 @@ class Playlist extends Component {
 
   resetDefaultPlaylistName(e) {
     if (!this.state.playlistName && e.target.value === '') {
-      this.setState({playlistName: 'New Playlist'});
+      this.setState({playlistName: this.state.playlistName});
     }
   }
 

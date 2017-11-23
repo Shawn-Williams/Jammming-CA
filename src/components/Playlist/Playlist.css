@@ -5,9 +5,34 @@
   overflow-y: scroll;
   width: 37%;
   max-height: 950px;
-  padding: 2.27rem 1.16rem;
+  padding: 1.5rem 1.16rem 2.27rem;
   background-color: rgba(1, 12, 63, 0.7);
   box-shadow: 0 4px 2px 2px #000000;
+}
+
+.Playlist-selectors {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.Playlist-selectors button {
+  top: -3rem;
+  /* width: 50%; */
+  height: 2.25rem;
+  margin: .8rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: .88rem;
+  margin-bottom: 20px;
+  border: none;
+  color: #fff;
+  background-color: #6c41ec; 
+}
+
+.Playlist-selectors button:hover {
+  cursor: pointer;
+  background-color:#6e974b;
 }
 
 .Playlist input {

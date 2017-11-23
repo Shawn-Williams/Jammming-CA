@@ -25,7 +25,7 @@ h2 {
 
 .App {
   height: 100%;
-  padding: 0 17% 10% 17%;
+  padding: 0 5% 10% 5%;
   background-image: url('./background_photo_desktop.jpg');
   background-size: cover;
   background-position: center;
@@ -49,38 +49,57 @@ h2 {
 }
 
 .main-page-header {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 60px 40px;
   grid-gap: 10px;
   background-color: #010c3f;
-  padding: .5rem 20px;;
+  padding: 0rem 20px;
+  z-index: 9999;
 }
 
 .page-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-column: 3/11;
-  /* grid-row: 1; */
-  padding: .77rem 0;
+  padding: 1.25rem 0;
   background-color: #010c3f;
-  text-align: center;
+}
+.dropdown-toggle {
+  font-size: 1.5rem;
+}
+
+.dropdown-toggle:hover {
+  cursor: pointer;
 }
 
 .user-info {
+  position: relative;
   grid-column: 1 / 13;
   grid-row: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
   color: white;
   font-size: .8rem;
+  background-color: #010c3f;
+  margin-bottom: -1rem;
+}
+
+.fa-angle-down-inactive,
+.fa-angle-down-active {
+  transition: all .5s ease-out;
+}
+
+.fa-angle-down-active {
+  transform: rotate(180deg);
 }
 
 .user-info img {
   display: none;
-  /* width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px; */
 }
 
 .user-info .user-name {
@@ -88,9 +107,40 @@ h2 {
   margin-left: 10px;
 }
 
-@media screen and (min-width: 400px) {
+.user-logout {
+  position: absolute; 
+  top: 70px;
+  left: 30px;
+  background-color: #fff;
+  color: black;
+  padding: 10px 20px;
+  transition: top .5s ease-out, background-color .2s ease;
+  z-index: -100;
+}
+
+.user-logout.hidden {
+  /* visibility: hidden; */
+  top: 0;
+  transition: top .5s ease-out, background-color .2s ease;
+}
+
+.user-logout:hover {
+  background-color: red;
+  color: #fff;
+  cursor: pointer;
+}
+
+.user-logout a:hover {
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 400px) {
+  /* .App {
+    padding: 0 17% 10% 17%;
+  } */
+  
   .main-page-header {
-    grid-template-rows: 60px;
+    grid-template-rows: 70px;
   }
 
   .page-title {
@@ -108,7 +158,7 @@ h2 {
     justify-content: flex-end;
     align-items: center;
     color: white;
-    font-size: .8rem;
+    font-size: 1rem;
   }
  
   .user-info img {
@@ -120,14 +170,14 @@ h2 {
   }
 }
 
-@media screen and (min-width: 650px) {
+@media only screen and (min-width: 650px) {
   .page-title {
     grid-column: 4 / 10;
     /* grid-row: 1; */
     text-align: center;
   }
   .user-info {
-    grid-column: 10 / 13;
+    grid-column: 11 / 13;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -138,5 +188,11 @@ h2 {
     height: 50px;
     border-radius: 50%;
     margin-left: 20px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .App {
+    padding: 0 17% 10% 17%;
   }
 }

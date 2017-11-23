@@ -5,7 +5,6 @@ import './TrackList.css';
 
 
 function TrackList (props) {
-	//console.log(props.tracks);
 		return (
 			<div className="TrackList">
 				{props.tracks.map(track => {

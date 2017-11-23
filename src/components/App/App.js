@@ -11,6 +11,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
+      menuExpanded: false,
       user: '',
       tracks: [],
       playlist: [],
@@ -22,16 +23,17 @@ class App extends React.Component {
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
-    this.checkLocalToken = this.checkLocalToken.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
   
   getAccessToken() {
     Spotify.getAccessToken();
-    this.setState({loggedIn: true})
   }
 
-  checkLocalToken() {
-    Spotify.localTokenisValid();
+  toggleDropdown(e) {
+    this.setState(prevState => ({menuExpanded: !prevState.menuExpanded}));
+    e.preventDefault();
   }
 
   searchSpotify(term) {
@@ -58,6 +60,11 @@ class App extends React.Component {
           })};
         }
     );
+  }
+
+  logoutUser() {
+    Spotify.resetTokens();
+    this.setState({loggedIn: false, user: '', menuExpanded: false});
   }
 
   savePlaylistToSpotify(name, playlist = this.state.playlist) {
@@ -89,28 +96,28 @@ class App extends React.Component {
    * This is to provide personalization on initial load from the Spotify authentication redirect.
    */
   componentWillMount() {
+    Spotify.tokenIsValid();
     if (window.location.href.match(/access_token=([^&]*)/)) {
       Spotify.parseToken();
       this.getUserInfo();
       this.setState({loggedIn: true});
-    } 
-    //console.log('Testing access token: ' + localStorage.getItem('accessToken'));
-    if (localStorage.getItem('accessToken')) {
-      console.log('access token exists')
+    } else if (localStorage.getItem('accessToken')) {
       Spotify.getAccessToken();
       this.getUserInfo();
       this.setState({loggedIn: true});
     } 
   }
 
-
-
-
   render() {
     let user = '';
-
+    let menuCaret = this.state.menuExpanded ? <i className="fa fa-angle-down fa-angle-down-active" aria-hidden="true"></i> : <i className="fa fa-angle-down fa-angle-down-inactive" aria-hidden="true"></i>;
     if (this.state.user) {
-      user = <div className="user-info">Hi<span className="user-name">{this.state.user.displayName.split(' ').shift()}</span><img src={this.state.user.imageUrl} alt='user avatar' /></div>;
+      user = <div className="user-info">
+               <a className='dropdown-toggle' onClick={this.toggleDropdown}>{menuCaret}</a>
+               <span className="user-name">Hi {this.state.user.displayName.split(' ').shift()}</span>
+               <span className={this.state.menuExpanded? 'user-logout' : 'user-logout hidden'}><a onClick={this.logoutUser} >Logout</a></span>
+                <img src={this.state.user.imageUrl} alt='user avatar' />
+            </div>;
     }
     return (
       <div>
