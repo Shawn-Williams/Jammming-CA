@@ -25,6 +25,8 @@ class App extends React.Component {
     this.getAccessToken = this.getAccessToken.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
+    this.reorder = this.reorder.bind(this);
+    this.updatePlaylist = this.updatePlaylist.bind(this);
   }
   
   getAccessToken() {
@@ -64,7 +66,7 @@ class App extends React.Component {
 
   logoutUser() {
     Spotify.resetTokens();
-    this.setState({loggedIn: false, user: '', menuExpanded: false});
+    this.setState({loggedIn: false, user: '', menuExpanded: false, tracks: [], playlist: []});
   }
 
   savePlaylistToSpotify(name, playlist = this.state.playlist) {
@@ -91,6 +93,18 @@ class App extends React.Component {
     this.setState({playlist: playlist});
   }
 
+  reorder(list, startIndex, endIndex) {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+  
+    return result;
+  };
+
+  updatePlaylist(newPlaylist) {
+    this.setState({playlist: newPlaylist});
+  }
+
   /**
    * Determine whether access token has been granted and query Spotify for user info if so.
    * This is to provide personalization on initial load from the Spotify authentication redirect.
@@ -107,6 +121,8 @@ class App extends React.Component {
       this.setState({loggedIn: true});
     } 
   }
+
+  
 
   render() {
     let user = '';
@@ -127,10 +143,10 @@ class App extends React.Component {
         </header> 
         <div className="App">
           <SearchBar search={this.searchSpotify} loggedIn={this.state.loggedIn} getAccessToken={this.getAccessToken}/>
-          <div className="App-playlist">
-            <SearchResults searchResults={this.state.tracks} addTrack={this.addTrack} playlist={this.state.playlist}/>
-            <Playlist tracks={this.state.playlist} removeTrack={this.removeTrack} savePlaylist={this.savePlaylistToSpotify} savedStatus={this.state.saved}/>
-          </div>
+            <div className="App-playlist">
+              <SearchResults searchResults={this.state.tracks} addTrack={this.addTrack} playlist={this.state.playlist}/>
+              <Playlist tracks={this.state.playlist} removeTrack={this.removeTrack} savePlaylist={this.savePlaylistToSpotify} savedStatus={this.state.saved} reorder={this.reorder} updatePlaylist={this.updatePlaylist}/>
+            </div>
         </div>
       </div>
     );

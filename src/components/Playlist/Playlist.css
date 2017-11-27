@@ -5,9 +5,29 @@
   overflow-y: scroll;
   width: 37%;
   max-height: 950px;
-  padding: 1.5rem 1.16rem 2.27rem;
+  padding: 1.5rem 1.16rem 2.27rem; 
   background-color: rgba(1, 12, 63, 0.7);
   box-shadow: 0 4px 2px 2px #000000;
+}
+
+.droppable-track-wrapper {
+  width: 100%;
+}
+
+.Playlist .Track:hover {
+  cursor: grab;
+}
+
+.Playlist .Track:active {
+  cursor: grabbing;
+}
+
+.Playlist .duration {
+  width: 100%;
+  text-align: left;
+  font-size: .75rem;
+  padding: .35rem 0;
+  color: rgb(240, 240, 135);
 }
 
 .Playlist-selectors {

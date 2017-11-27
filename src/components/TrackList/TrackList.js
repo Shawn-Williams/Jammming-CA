@@ -3,28 +3,35 @@ import Track from '../Track/Track';
 
 import './TrackList.css';
 
+class TrackList extends React.Component{
+  
+	inPlaylist = false;
 
-
-function TrackList (props) {
-	let inPlaylist = false;
-	
-	function isInPlaylist (track, el) {
+	isInPlaylist = (track, el) => {
 		return el.id === track;
 	};
-	return (
-		<div className="TrackList">
-			{props.tracks.map(track => {
-				/**
-	       * Set a boolean property based on whether a track in the search results is already in the playlist
-	      */
-				if (props.playlist) {
-					inPlaylist = props.playlist.find(isInPlaylist.bind(this, track.id)) ? true : false;
+	
+	render() {
+		return (
+			<div className="TrackList" >
+				{this.props.tracks.map((track, index) => {
+					let action; 
+					if(this.props.listType === "search-results") {
+						action = "+"
+					} else if (this.props.listType === "playlist") {
+						action = "-";
+					}
+					/**
+					 * Set a boolean property based on whether a track in the search results is already in the playlist
+					*/
+					if (this.props.playlist) {
+						this.inPlaylist = this.props.playlist.find(this.isInPlaylist.bind(this, track.id)) ? true : false;
+					}
+					return <Track key={index} track={track} action={action} modifyTracklist={this.props.modifyTracklist} inPlaylist={this.inPlaylist} listType={this.props.listType}/>
 				}
-				return <Track key={track.id} track={track} action={props.action} modifyPlaylist={props.modifyPlaylist} inPlaylist={inPlaylist}/>
-			})}
-			
+			)}
 		</div>
-	)
+	)}
 } 
 
 export default TrackList;

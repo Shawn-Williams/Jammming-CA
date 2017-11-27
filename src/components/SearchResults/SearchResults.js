@@ -3,15 +3,13 @@ import TrackList from '../TrackList/TrackList';
 import './SearchResults.css';
 
 
-class SearchResults extends React.Component {
-  render() {
-    return (
-      <div className="SearchResults">
-      <h2>Results</h2>
-        <TrackList tracks={this.props.searchResults} action="+" modifyPlaylist={this.props.addTrack} playlist={this.props.playlist}/>
-      </div>
-    )
-  }
+const SearchResults =(props) => {
+  return (
+    <div className="SearchResults">
+    <h2>Results</h2>
+      <TrackList tracks={props.searchResults} listType="search-results" modifyTracklist={props.addTrack} playlist={props.playlist}/>
+    </div>
+  )
 }
 
 export default SearchResults;

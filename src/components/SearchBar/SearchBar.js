@@ -33,12 +33,14 @@ class SearchBar extends React.Component {
 
   render() {
     let searchButton = <button onClick={this.getAccessToken} className="logged-out" type="submit">CONNECT TO SPOTIFY</button>
+    let searchBarValue = '';
     if (this.props.loggedIn) {
       searchButton = <button onClick={this.handleSearch} type="submit">SEARCH</button>
+      searchBarValue = this.state.term;
     }
     return (
       <form className="SearchBar">
-        <input placeholder="Enter A Song, Album, or Artist" onChange={this.handleTermChange} disabled={!this.props.loggedIn} />
+        <input placeholder="Enter A Song, Album, or Artist" onChange={this.handleTermChange} disabled={!this.props.loggedIn} value={searchBarValue}/>
         {searchButton}
       </form> 
     )

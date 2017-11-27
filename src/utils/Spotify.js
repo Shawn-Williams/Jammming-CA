@@ -45,7 +45,6 @@ let Spotify = {
  */
   tokenIsValid() {
     if (Date.now() > localStorage.getItem('tokenExpiration')) {
-      console.log('Token is invalid')
       localStorage.removeItem('accessToken');
       localStorage.removeItem('tokenExpiration');
       accessToken = '';
@@ -81,7 +80,8 @@ let Spotify = {
               artist: track.artists[0].name,
               album: track.album.name,
               uri: track.uri,
-              previewUrl: track.preview_url
+              previewUrl: track.preview_url,
+              duration: track.duration_ms
             }
           });
         } else return [];
