@@ -20,3 +20,10 @@ an artist name, album title, or song title. Individual tracks can be added and r
 ```
 5. Run 'npm run build' in the terminal to create the application's production build.
 6. Deploy the production build to your hosting service of choice.
+
+### Functionality
+
+* This application makes use of [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd) to provide drag-and-drop sorting in the user created playlist.
+
+* User can clear active tokens by using the logout option located in the header dropdown menu. This will clear any active token and require the user to request a new token to continue. Currently, Spotify provides no endpoint to 
+revoke permissions; however, with the `show_dialog` parameter in the request URI set to true, the user can choose to log in under a different account.
