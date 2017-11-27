@@ -58,7 +58,11 @@ class Playlist extends Component {
       totalTime += track.duration;
       return null;
     })
-    return duration(totalTime);
+
+    if (totalTime > 0) {
+      return `Playlist Duration: ${duration(totalTime)}`;
+    } else return null;
+    
   }
 
   onDragEnd = (result) => {
@@ -77,17 +81,20 @@ class Playlist extends Component {
   }
 
   render() {
-    let saveButton = <a className="Playlist-save" onClick={this.handlePlaylistSave}>SAVE TO SPOTIFY</a>;
+    let saveButton = <a className="Playlist-save" onClick={this.handlePlaylistSave}>SAVE TO SPOTIFY</a>,
+        reorderInstructions = this.props.tracks.length > 0? <span className="sort-instructions">DRAG TO REORDER</span> : '';
 
     if (this.props.savedStatus) {
       saveButton = <span className="Playlist-save success">SAVE SUCCESSFUL!</span> 
     }
 
+    
+
     return (
     <DragDropContext onDragEnd={this.onDragEnd}>
       <div className="Playlist">
         <input value={this.state.playlistName} onChange={this.setPlaylistName} onClick={this.clearInputOnClick} />
-        <span className="duration">Playlist duration: {this.playlistDuration()}</span>
+        <span className="duration">{this.playlistDuration()}</span>
         <Droppable droppableId="droppable" type="user-playlist">
           {(dropProvided, snapshot) => (
             <div ref={dropProvided.innerRef}  className="droppable-track-wrapper">
@@ -96,6 +103,7 @@ class Playlist extends Component {
             </div>
           )}
           </Droppable>
+        {reorderInstructions}
         {saveButton}
       </div>
     </DragDropContext>

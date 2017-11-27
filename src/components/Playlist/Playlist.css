@@ -10,7 +10,15 @@
   box-shadow: 0 4px 2px 2px #000000;
 }
 
-.droppable-track-wrapper {
+.Playlist .sort-instructions {
+  font-size: .8rem;
+  width: 100%;
+  color: rgb(240, 240, 135);
+  padding: .5rem;
+  text-align: center;
+}
+
+.Playlist .droppable-track-wrapper {
   width: 100%;
 }
 

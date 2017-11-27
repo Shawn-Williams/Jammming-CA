@@ -47,12 +47,12 @@
   outline: 0;
 }
 
-button.logged-out {
+.SearchBar button.logged-out {
   background-color: #1daf31;
   padding: .77rem 1rem;
   border: none;
 }
 
-button.logged-out:hover {
+.SearchBar button.logged-out:hover {
   background-color: #278d35;
 }
