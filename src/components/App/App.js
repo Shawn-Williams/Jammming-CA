@@ -87,7 +87,7 @@ class App extends React.Component {
     
   }
 
-  removeTrack(track) {
+  removeTrack = (track) => {
     let playlist = this.state.playlist;
     playlist.splice(playlist.indexOf(track), 1);
     this.setState({playlist: playlist});

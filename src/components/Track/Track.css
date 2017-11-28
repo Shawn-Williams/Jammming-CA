@@ -2,11 +2,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(256, 256, 256, 0.8);
-  padding: .25rem 0;
-}
-
-.Track .droppable-wrapper {
-  width: 100%;
+  padding: .4rem 0;
 }
 
 .Track-action {
@@ -35,6 +31,7 @@
 .Track-information p {
   font-size: .83rem;
   font-weight: 300;
+  line-height: 1rem;
   color: rgba(256, 256, 256, 0.8);
   margin-bottom: .3rem;
 }
@@ -51,7 +48,4 @@
 
 .Track .inPlaylist:hover {
   cursor: not-allowed;
-}
-audio::-webkit-media-controls-panel {
-  background: none;
 }

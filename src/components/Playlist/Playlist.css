@@ -22,11 +22,11 @@
   width: 100%;
 }
 
-.Playlist .Track:hover {
+.Playlist:hover {
   cursor: grab;
 }
 
-.Playlist .Track:active {
+.Playlist.dragging {
   cursor: grabbing;
 }
 

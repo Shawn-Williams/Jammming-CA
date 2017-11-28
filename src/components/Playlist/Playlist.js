@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TrackList from '../TrackList/TrackList';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import './Playlist.css';
 
 
-class Playlist extends Component {
+class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,8 +14,8 @@ class Playlist extends Component {
     this.setPlaylistName = this.setPlaylistName.bind(this);
     this.handlePlaylistSave = this.handlePlaylistSave.bind(this);
     this.clearInputOnclick = this.clearInputOnClick.bind(this);
-    this.resetDefaultPlaylistName = this.resetDefaultPlaylistName.bind(this);
     this.playlistDuration = this.playlistDuration.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
@@ -26,12 +26,6 @@ class Playlist extends Component {
   clearInputOnClick(e) {
     if (e.target.value === 'New Playlist') {
       e.target.value='';
-    }
-  }
-
-  resetDefaultPlaylistName(e) {
-    if (!this.state.playlistName && e.target.value === '') {
-      this.setState({playlistName: this.state.playlistName});
     }
   }
 
@@ -65,7 +59,12 @@ class Playlist extends Component {
     
   }
 
-  onDragEnd = (result) => {
+  onDragStart() {
+    document.getElementById('Droppable-playlist').classList.add('dragging');
+  }
+
+  onDragEnd(result) {
+    document.getElementById('Droppable-playlist').classList.remove('dragging');
     // if dropped outside the list
     if (!result.destination) {
       return;
@@ -87,26 +86,23 @@ class Playlist extends Component {
     if (this.props.savedStatus) {
       saveButton = <span className="Playlist-save success">SAVE SUCCESSFUL!</span> 
     }
-
-    
-
     return (
-    <DragDropContext onDragEnd={this.onDragEnd}>
-      <div className="Playlist">
-        <input value={this.state.playlistName} onChange={this.setPlaylistName} onClick={this.clearInputOnClick} />
-        <span className="duration">{this.playlistDuration()}</span>
-        <Droppable droppableId="droppable" type="user-playlist">
-          {(dropProvided, snapshot) => (
-            <div ref={dropProvided.innerRef}  className="droppable-track-wrapper">
-              <TrackList tracks={this.props.tracks} listType="playlist" modifyTracklist={this.props.removeTrack}/>
-              {dropProvided.placeholder}
-            </div>
-          )}
-          </Droppable>
-        {reorderInstructions}
-        {saveButton}
-      </div>
-    </DragDropContext>
+      <DragDropContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+        <div id="Droppable-playlist" className="Playlist">
+          <input value={this.state.playlistName} onChange={this.setPlaylistName} onClick={this.clearInputOnClick}/>
+          <span className="duration">{this.playlistDuration()}</span>
+          <Droppable droppableId="droppable" type="user-playlist">
+            {(dropProvided, snapshot) => (
+              <div ref={dropProvided.innerRef}  className="droppable-track-wrapper" /*style={this.getListStyle(snapshot.isDraggingOver)}*/>
+                <TrackList tracks={this.props.tracks} listType="playlist" modifyTracklist={this.props.removeTrack}/>
+                {dropProvided.placeholder}
+              </div>
+            )}
+            </Droppable>
+          {reorderInstructions}
+          {saveButton}
+        </div>
+      </DragDropContext>
     )
   }
 }
