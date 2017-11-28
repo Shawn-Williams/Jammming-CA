@@ -84,7 +84,6 @@ class App extends React.Component {
     if (this.state.playlist.indexOf(track) === -1) {
       this.setState({playlist: this.state.playlist.concat(track)});
     }
-    
   }
 
   removeTrack = (track) => {

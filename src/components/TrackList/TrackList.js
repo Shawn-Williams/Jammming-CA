@@ -14,7 +14,7 @@ class TrackList extends React.Component{
 
 	render() {
 		return (
-			<div className="TrackList" >
+			<div className={`TrackList ${this.props.listType}`} >
 				{this.props.tracks.map((track, index) => {
 					let action,
 							renderedTrack; 
