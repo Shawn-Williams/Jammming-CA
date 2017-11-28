@@ -6,10 +6,8 @@ const REDIRECT_URI = CONFIG.redirectURI;
 let accessToken,
     expiresIn,
     userId;
-    // token = accessToken ? accessToken : localStorage.getItem('accessToken');
 
-
-let Spotify = {
+const Spotify = {
 
   getAccessToken() {
     this.tokenIsValid();
