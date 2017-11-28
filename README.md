@@ -4,6 +4,8 @@ This application is build with React as a project for Codecademy Intensive Front
 The application allows a user to connect the app to his or her Spotify account, search for tracks by providing either
 an artist name, album title, or song title. Individual tracks can be added and removed from the search results to the playlist using the corresponding + and - buttons. Additionally, the playlist title can be changed and the playlist will be saved to the user's account on successful save.
 
+A live demo of this app is currently deployed on [Surge](https://surge.sh/) and can be located [here](http://jammming-ca.surge.sh).
+
 ## Instructions
 1. Download or clone repo.
 2. Navigate to the project folder in terminal.
