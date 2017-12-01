@@ -24,7 +24,7 @@ const Spotify = {
 
   parseToken() { 
     accessToken = window.location.href.match(/access_token=([^&]*)/)[0].slice(13);
-    expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11)
+    expiresIn = window.location.href.match(/expires_in=([^&]*)/)[0].slice(11);
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('tokenExpiration', Date.now() + (expiresIn * 1000));
     window.history.pushState('Access Token', null, '/');
@@ -38,6 +38,7 @@ const Spotify = {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('tokenExpiration');
   },
+  
  /**
   * Test token expiration and reset both local token and token variable if expired
  */

@@ -17,6 +17,7 @@ class Playlist extends React.Component {
     this.playlistDuration = this.playlistDuration.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
+    //this.reorder = this.reorder.bind(this);
   }
 
   setPlaylistName(e) {
@@ -65,18 +66,28 @@ class Playlist extends React.Component {
 
   onDragEnd(result) {
     document.getElementById('Droppable-playlist').classList.remove('dragging');
-    // if dropped outside the list
+    // Cancels if element is dropped outside of list.
     if (!result.destination) {
       return;
-    }
-    
-    const newList = this.props.reorder(
+    };
+
+    // Create the new list
+    const reorder = (list, startIndex, endIndex) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    };
+
+    //Update the list based on the current list and the result object provided by the API.
+    const updatedList = reorder(
       this.props.tracks,
       result.source.index,
       result.destination.index
     );
     
-    this.props.updatePlaylist(newList)
+    //Update the playlist state by providing the new list.
+    this.props.updatePlaylist(updatedList);
   }
 
   render() {

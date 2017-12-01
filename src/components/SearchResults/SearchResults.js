@@ -3,10 +3,10 @@ import TrackList from '../TrackList/TrackList';
 import './SearchResults.css';
 
 
-const SearchResults =(props) => {
+function SearchResults(props) {
   return (
     <div className="SearchResults">
-    <h2>Results</h2>
+      <h2>Results</h2>
       <TrackList tracks={props.searchResults} listType="search-results" modifyTracklist={props.addTrack} playlist={props.playlist}/>
     </div>
   )
